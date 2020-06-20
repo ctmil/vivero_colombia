@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record model="ir.ui.view" id="vivero_planta_view_form">
+		<field name="name">vivero.planta.view.form</field>
+		<field name="model">vivero.planta</field>
+		<field name="arch" type="xml">
+		<form string="Planta">
+			<sheet>
+				<h1>
+					<field name="name" placeholder="Nombre planta"/>
+				</h1>
+				<notebook>
+					<page string="Compras">
+						<group>
+							<field name="price" string="Precio Unitario"/>
+							<field name="monto_pedido" string="Monto Pedido"/>
+						</group>
+					</page>
+					<page string="Pedidos">
+						<group>
+							<field name="pedido_ids">
+								<tree editable="bottom">
+									<field name="partner_id" />
+									<field name="qty" />
+									<field name="amount_total" />
+									<field name="last_modification" readonly="1" />
+								</tree>
+							</field>
+						</group>
+					</page>
+				</notebook>
+			</sheet>
+		</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="vivero_planta_view_search">
+		<field name="name">vivero.planta.view.search</field>
+		<field name="model">vivero.planta</field>
+		<field name="arch" type="xml">
+		<search string="Buscar Planta">
+			<field name="name" />
+			<field name="price" />
+			<filter string="Plantas sin pedidos" name="unsold" domain="[('pedido_ids','=',False)]" />
+		</search>
+		</field>
+	</record>
+
+
+	<record model="ir.ui.view" id="vivero_planta_view_tree">
+		<field name="name">vivero.planta.view.tree</field>
+		<field name="model">vivero.planta</field>
+		<field name="arch" type="xml">
+		<tree string="Planta">
+			<field name="name" />
+			<field name="price" />
+		</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="vivero_pedido_view_form">
+		<field name="name">vivero.pedido.view.form</field>
+		<field name="model">vivero.pedido</field>
+		<field name="arch" type="xml">
+			<form string="Pedido">
+				<header>
+					<button name="process_file" type="object" string="Procesar Archivo" />
+					<button name="change_state" type="object" 
+						string="Cambiar Estado" states="draft,confirmed" />
+					<field name="state" widget="statusbar" />
+				</header>
+				<sheet>
+					<group>
+						<field name="plant_id" />
+						<field name="partner_id" />
+						<field name="qty" />
+						<field name="amount_total" />
+					</group>
+					<group string="Archivo">
+						<field name="order_file" widget="binary" />
+						<field name="datos" readonly="1" />
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="vivero_pedido_view_tree">
+		<field name="name">vivero.pedido.view.tree</field>
+		<field name="model">vivero.pedido</field>
+		<field name="arch" type="xml">
+		<tree string="Pedido">
+			<field name="plant_id" />
+			<field name="partner_id" />
+			<field name="qty" />
+			<field name="amount_total" />
+			<field name="state" />
+		</tree>
+		</field>
+	</record>
+
+
+	<record model="ir.actions.act_window" id="action_vivero_pedido">
+		<field name="name">Pedido</field>
+		<field name="res_model">vivero.pedido</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+
+	<record model="ir.actions.act_window" id="action_vivero_planta">
+		<field name="name">Plantas</field>
+		<field name="res_model">vivero.planta</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<menuitem name="Vivero Colombia" id="vivero_root_menu" />
+
+	<menuitem name="Plantas" id="vivero_planta_menu"
+		parent="vivero_root_menu"
+		action="action_vivero_planta"
+		sequence="1"/>
+
+	<menuitem name="Pedidos" id="vivero_pedidos_menu"
+		parent="vivero_root_menu"
+		action="action_vivero_pedido"
+		sequence="10"/>
+</odoo>
